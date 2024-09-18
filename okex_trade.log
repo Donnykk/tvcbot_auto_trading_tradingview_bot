@@ -1,0 +1,56 @@
+2024/09/18/ 14:17:13 PM - INFO - *区块普拉斯(Youtube/Bilibili)自动交易服务端
+
+2024/09/18/ 14:17:13 PM - INFO - ①.此程序仅支持OKEX欧易交易所(https://www.okx.com/join/tradingview 此链接注册的账号交易手续费优惠二折)
+2024/09/18/ 14:17:13 PM - INFO - ②.建议运行再在有独立IP的服务器上，若在个人电脑运行，需要FRP内网穿透，而且影响软件效率
+2024/09/18/ 14:17:13 PM - INFO - ③.请务必修改 config.ini 中的apiSec，随便修改为复杂的密钥
+2024/09/18/ 14:17:13 PM - INFO - 系统接口服务即将启动！服务监听地址0.0.0.0:80
+2024/09/18/ 14:17:13 PM - INFO - 接口外网访问地址：http://111.65.39.218:80/order
+2024/09/18/ 14:17:13 PM - INFO - 请不要关闭这个黑色窗口！否则交易服务将自动停止，接口无法使用！
+2024/09/18/ 14:19:09 PM - INFO - *区块普拉斯(Youtube/Bilibili)自动交易服务端
+
+2024/09/18/ 14:19:09 PM - INFO - ①.此程序仅支持OKEX欧易交易所(https://www.okx.com/join/tradingview 此链接注册的账号交易手续费优惠二折)
+2024/09/18/ 14:19:09 PM - INFO - ②.建议运行再在有独立IP的服务器上，若在个人电脑运行，需要FRP内网穿透，而且影响软件效率
+2024/09/18/ 14:19:09 PM - INFO - ③.请务必修改 config.ini 中的apiSec，随便修改为复杂的密钥
+2024/09/18/ 14:19:09 PM - INFO - 系统接口服务即将启动！服务监听地址0.0.0.0:80
+2024/09/18/ 14:19:09 PM - INFO - 接口外网访问地址：http://111.65.39.218:80/order
+2024/09/18/ 14:19:09 PM - INFO - 请不要关闭这个黑色窗口！否则交易服务将自动停止，接口无法使用！
+2024/09/18/ 14:19:09 PM - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:80
+ * Running on http://172.20.10.2:80
+2024/09/18/ 14:19:09 PM - INFO - [33mPress CTRL+C to quit[0m
+2024/09/18/ 14:19:09 PM - INFO -  * Restarting with stat
+2024/09/18/ 14:19:11 PM - INFO - *区块普拉斯(Youtube/Bilibili)自动交易服务端
+
+2024/09/18/ 14:19:11 PM - INFO - ①.此程序仅支持OKEX欧易交易所(https://www.okx.com/join/tradingview 此链接注册的账号交易手续费优惠二折)
+2024/09/18/ 14:19:11 PM - INFO - ②.建议运行再在有独立IP的服务器上，若在个人电脑运行，需要FRP内网穿透，而且影响软件效率
+2024/09/18/ 14:19:11 PM - INFO - ③.请务必修改 config.ini 中的apiSec，随便修改为复杂的密钥
+2024/09/18/ 14:19:11 PM - INFO - 系统接口服务即将启动！服务监听地址0.0.0.0:80
+2024/09/18/ 14:19:11 PM - INFO - 接口外网访问地址：http://111.65.39.218:80/order
+2024/09/18/ 14:19:11 PM - INFO - 请不要关闭这个黑色窗口！否则交易服务将自动停止，接口无法使用！
+2024/09/18/ 14:19:11 PM - WARNING -  * Debugger is active!
+2024/09/18/ 14:19:11 PM - INFO -  * Debugger PIN: 977-071-618
+2024/09/18/ 15:50:48 PM - INFO - *区块普拉斯(Youtube/Bilibili)自动交易服务端
+
+2024/09/18/ 15:50:48 PM - INFO - ①.此程序仅支持OKEX欧易交易所(https://www.okx.com/join/tradingview 此链接注册的账号交易手续费优惠二折)
+2024/09/18/ 15:50:48 PM - INFO - ②.建议运行再在有独立IP的服务器上，若在个人电脑运行，需要FRP内网穿透，而且影响软件效率
+2024/09/18/ 15:50:48 PM - INFO - ③.请务必修改 config.ini 中的apiSec，随便修改为复杂的密钥
+2024/09/18/ 15:50:48 PM - INFO - 系统接口服务即将启动！服务监听地址0.0.0.0:80
+2024/09/18/ 15:50:48 PM - INFO - 接口外网访问地址：http://111.65.39.218:80/order
+2024/09/18/ 15:50:48 PM - INFO - 请不要关闭这个黑色窗口！否则交易服务将自动停止，接口无法使用！
+2024/09/18/ 15:50:49 PM - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:80
+ * Running on http://172.20.10.2:80
+2024/09/18/ 15:50:49 PM - INFO - [33mPress CTRL+C to quit[0m
+2024/09/18/ 15:50:49 PM - INFO -  * Restarting with stat
+2024/09/18/ 15:50:50 PM - INFO - *区块普拉斯(Youtube/Bilibili)自动交易服务端
+
+2024/09/18/ 15:50:50 PM - INFO - ①.此程序仅支持OKEX欧易交易所(https://www.okx.com/join/tradingview 此链接注册的账号交易手续费优惠二折)
+2024/09/18/ 15:50:50 PM - INFO - ②.建议运行再在有独立IP的服务器上，若在个人电脑运行，需要FRP内网穿透，而且影响软件效率
+2024/09/18/ 15:50:50 PM - INFO - ③.请务必修改 config.ini 中的apiSec，随便修改为复杂的密钥
+2024/09/18/ 15:50:50 PM - INFO - 系统接口服务即将启动！服务监听地址0.0.0.0:80
+2024/09/18/ 15:50:50 PM - INFO - 接口外网访问地址：http://111.65.39.218:80/order
+2024/09/18/ 15:50:50 PM - INFO - 请不要关闭这个黑色窗口！否则交易服务将自动停止，接口无法使用！
+2024/09/18/ 15:50:50 PM - WARNING -  * Debugger is active!
+2024/09/18/ 15:50:50 PM - INFO -  * Debugger PIN: 977-071-618

@@ -6,7 +6,6 @@ from flask import Flask
 from flask import request, abort
 import json
 import urllib.request
-import requests
 import os
 import _thread
 import time
@@ -15,7 +14,7 @@ import time
 # 读取配置文件，优先读取json格式，如果没有就读取ini格式
 config = {}
 if os.path.exists('./config.json'):
-    config = json.load(open('./config.json',encoding="UTF-8"))
+    config = json.load(open('./config.json', encoding="UTF-8"))
 elif os.path.exists('./config.ini'):
     conf = configparser.ConfigParser()
     conf.read("./config.ini", encoding="UTF-8")
@@ -50,7 +49,8 @@ accountConfig = {
     'password': config['account']['password'],
     'enable_proxies': config['account']['enable_proxies'],
     'proxies': {
-        'http': config['account']['proxies'],  # these proxies won't work for you, they are here for example
+        # these proxies won't work for you, they are here for example
+        'http': config['account']['proxies'],
         'https': config['account']['proxies'],
     }
 }
@@ -58,11 +58,12 @@ accountConfig = {
 # 格式化日志
 LOG_FORMAT = "%(asctime)s - %(levelname)s - %(message)s"
 DATE_FORMAT = "%Y/%m/%d/ %H:%M:%S %p"
-logging.basicConfig(filename='okex_trade.log', level=logging.INFO, format=LOG_FORMAT, datefmt=DATE_FORMAT)
+logging.basicConfig(filename='okex_trade.log',
+                    level=logging.INFO, format=LOG_FORMAT, datefmt=DATE_FORMAT)
 # logging.FileHandler(filename='okex_trade.log', encoding=)
 
 # CCXT初始化
-exchange = ccxt.okex5(config={
+exchange = ccxt.okx(config={
     'enableRateLimit': True,
     'apiKey': accountConfig['apiKey'],
     'secret': accountConfig['secret'],
@@ -81,8 +82,10 @@ lastOrdType = None
 lastAlgoOrdId = 0
 
 # 挂止盈止损单
+
+
 def sltpThread(oid, side, symbol, sz, tdMode, config):
-    global lastOrdType,lastAlgoOrdId
+    global lastOrdType, lastAlgoOrdId
     privatePostTradeOrderAlgoParams = {
         "instId": symbol,
         "tdMode": tdMode,
@@ -98,21 +101,27 @@ def sltpThread(oid, side, symbol, sz, tdMode, config):
         privatePostTradeOrderAlgoParams['tpOrdPx'] = config['trading']['stop_gain_order_price']
     while True:
         try:
-            privateGetTradeOrderRes = exchange.privateGetTradeOrder(params={"ordId": oid,"instId": symbol})
+            privateGetTradeOrderRes = exchange.privateGetTradeOrder(
+                params={"ordId": oid, "instId": symbol})
             print(privateGetTradeOrderRes)
             if privateGetTradeOrderRes['data'][0]['state'] == "filled":
                 avgPx = float(privateGetTradeOrderRes['data'][0]['avgPx'])
                 direction = -1 if side.lower() == "buy" else 1
-                slTriggerPx = (1 + direction * float(config['trading']['stop_loss_trigger_price'])*0.01) * avgPx
-                tpOrdPx = (1 + direction * float(config['trading']['stop_gain_order_price'])*0.01) * avgPx
-                tpTriggerPx = (1 - direction * float(config['trading']['stop_gain_trigger_price'])*0.01) * avgPx
-                slOrdPx = (1 - direction * float(config['trading']['stop_loss_order_price'])*0.01) * avgPx
+                slTriggerPx = (
+                    1 + direction * float(config['trading']['stop_loss_trigger_price'])*0.01) * avgPx
+                tpOrdPx = (
+                    1 + direction * float(config['trading']['stop_gain_order_price'])*0.01) * avgPx
+                tpTriggerPx = (
+                    1 - direction * float(config['trading']['stop_gain_trigger_price'])*0.01) * avgPx
+                slOrdPx = (
+                    1 - direction * float(config['trading']['stop_loss_order_price'])*0.01) * avgPx
                 privatePostTradeOrderAlgoParams['slTriggerPx'] = '%.12f' % slTriggerPx
                 privatePostTradeOrderAlgoParams['slOrdPx'] = '%.12f' % slOrdPx
                 privatePostTradeOrderAlgoParams['tpTriggerPx'] = '%.12f' % tpTriggerPx
                 privatePostTradeOrderAlgoParams['tpOrdPx'] = '%.12f' % tpOrdPx
                 print("订单{oid}设置止盈止损...".format(oid=oid))
-                privatePostTradeOrderAlgoRes = exchange.privatePostTradeOrderAlgo(params=privatePostTradeOrderAlgoParams)
+                privatePostTradeOrderAlgoRes = exchange.privatePostTradeOrderAlgo(
+                    params=privatePostTradeOrderAlgoParams)
                 if 'code' in privatePostTradeOrderAlgoRes and privatePostTradeOrderAlgoRes['code'] == '0':
                     lastAlgoOrdId = privatePostTradeOrderAlgoRes['data'][0]['algoId']
                     break
@@ -125,7 +134,6 @@ def sltpThread(oid, side, symbol, sz, tdMode, config):
             print(e)
         time.sleep(1)
     print("订单{oid}止盈止损单挂单结束".format(oid=oid))
-
 
 
 # 设置杠杆
@@ -145,7 +153,8 @@ def setLever(_symbol, _tdMode, _lever):
 # 市价全平
 def cancelLastOrder(_symbol, _lastOrdId):
     try:
-        res = exchange.privatePostTradeCancelOrder(params={"instId": _symbol, "ordId": _lastOrdId})
+        res = exchange.privatePostTradeCancelOrder(
+            params={"instId": _symbol, "ordId": _lastOrdId})
         # logging.info("privatePostTradeCancelBatchOrders " + json.dumps(res))
         return True
     except Exception as e:
@@ -156,7 +165,8 @@ def cancelLastOrder(_symbol, _lastOrdId):
 # 平掉所有仓位
 def closeAllPosition(_symbol, _tdMode):
     try:
-        res = exchange.privatePostTradeClosePosition(params={"instId": _symbol, "mgnMode": _tdMode})
+        res = exchange.privatePostTradeClosePosition(
+            params={"instId": _symbol, "mgnMode": _tdMode})
         # logging.info("privatePostTradeClosePosition " + json.dumps(res))
         return True
     except Exception as e:
@@ -164,18 +174,21 @@ def closeAllPosition(_symbol, _tdMode):
         return False
 
 # 开仓
+
+
 def createOrder(_symbol, _amount, _price, _side, _ordType, _tdMode, enable_stop_loss=False, stop_loss_trigger_price=0, stop_loss_order_price=0, enable_stop_gain=False, stop_gain_trigger_price=0, stop_gain_order_price=0):
     try:
         # 挂单
         res = exchange.privatePostTradeOrder(
             params={"instId": _symbol, "sz": _amount, "px": _price, "side": _side, "ordType": _ordType,
                     "tdMode": _tdMode})
-        global lastOrdId,config
+        global lastOrdId, config
         lastOrdId = res['data'][0]['ordId']
         # 如果止盈止损
         if config['trading']['enable_stop_loss'] or config['trading']['enable_stop_gain']:
             try:
-                _thread.start_new_thread(sltpThread, (lastOrdId, _side, _symbol, _amount, _tdMode, config))
+                _thread.start_new_thread(
+                    sltpThread, (lastOrdId, _side, _symbol, _amount, _tdMode, config))
             except:
                 logging.error("Error: unable to run sltpThread")
         return True, "create order successfully"
@@ -189,7 +202,8 @@ def initInstruments():
     c = 0
     try:
         # 获取永续合约基础信息
-        swapInstrumentsRes = exchange.publicGetPublicInstruments(params={"instType": "SWAP"})
+        swapInstrumentsRes = exchange.publicGetPublicInstruments(
+            params={"instType": "SWAP"})
         if swapInstrumentsRes['code'] == '0':
             global swapInstruments
             swapInstruments = swapInstrumentsRes['data']
@@ -198,7 +212,8 @@ def initInstruments():
         logging.error("publicGetPublicInstruments " + str(e))
     try:
         # 获取交割合约基础信息
-        futureInstrumentsRes = exchange.publicGetPublicInstruments(params={"instType": "FUTURES"})
+        futureInstrumentsRes = exchange.publicGetPublicInstruments(
+            params={"instType": "FUTURES"})
         if futureInstrumentsRes['code'] == '0':
             global futureInstruments
             futureInstruments = futureInstrumentsRes['data']
@@ -213,11 +228,14 @@ def initInstruments():
 # 1、币本位合约：币数=张数*面值*合约乘数/标记价格
 # 2、U本位合约：币数=张数*面值*合约乘数*标记价格
 # 交割合约和永续合约合约乘数都是1
+
+
 def amountConvertToSZ(_symbol, _amount, _price, _ordType):
     _symbol = _symbol.upper()
     _symbolSplit = _symbol.split("-")
     isSwap = _symbol.endswith("SWAP")
     # 获取合约面值
+
     def getFaceValue(_symbol):
         instruments = swapInstruments if isSwap else futureInstruments
         for i in instruments:
@@ -233,7 +251,8 @@ def amountConvertToSZ(_symbol, _amount, _price, _ordType):
     if _symbolSplit[1] == "USD":
         # 如果是市价单，获取一下最新标记价格
         if _ordType.upper() == "MARKET":
-            _price = exchange.publicGetPublicMarkPrice(params={"instId": _symbol,"instType":("SWAP" if isSwap else "FUTURES")})['data'][0]['markPx']
+            _price = exchange.publicGetPublicMarkPrice(params={"instId": _symbol, "instType": (
+                "SWAP" if isSwap else "FUTURES")})['data'][0]['markPx']
         sz = sz * float(_price)
     return int(sz)
 
@@ -242,6 +261,7 @@ def amountConvertToSZ(_symbol, _amount, _price, _ordType):
 setLever(symbol, tdMode, lever)
 
 app = Flask(__name__)
+
 
 @app.before_request
 def before_req():
@@ -292,19 +312,22 @@ def order():
                 return ret
         # 先取消未成交的挂单 然后平仓
         ret["cancelLastOrder"] = cancelLastOrder(_params['symbol'], lastOrdId)
-        ret["closedPosition"] = closeAllPosition(_params['symbol'], _params['tdMode'])
+        ret["closedPosition"] = closeAllPosition(
+            _params['symbol'], _params['tdMode'])
         # 开仓
-        sz = amountConvertToSZ(_params['symbol'], _params['amount'], _params['price'], _params['ordType'])
+        sz = amountConvertToSZ(
+            _params['symbol'], _params['amount'], _params['price'], _params['ordType'])
         if sz < 1:
             ret['msg'] = 'Amount is too small. Please increase amount.'
         else:
             ret["createOrderRes"], ret['msg'] = createOrder(_params['symbol'], sz, _params['price'], _params['side'],
-                                                _params['ordType'], _params['tdMode'])
+                                                            _params['ordType'], _params['tdMode'])
             lastOrdType = _params['side']
     # 平仓
     elif _params['side'].lower() in ["close"]:
         lastOrdType = None
-        ret["closedPosition"] = closeAllPosition(_params['symbol'], _params['tdMode'])
+        ret["closedPosition"] = closeAllPosition(
+            _params['symbol'], _params['tdMode'])
 
     # 取消挂单
     elif _params['side'].lower() in ["cancel"]:
@@ -318,7 +341,8 @@ def order():
 
 if __name__ == '__main__':
     try:
-        ip = json.load(urllib.request.urlopen('http://httpbin.org/ip'))['origin']
+        ip = json.load(urllib.request.urlopen(
+            'http://httpbin.org/ip'))['origin']
         logging.info("*区块普拉斯(Youtube/Bilibili)自动交易服务端\n")
         logging.info(
             "①.此程序仅支持OKEX欧易交易所(https://www.okx.com/join/tradingview 此链接注册的账号交易手续费优惠二折)".format(
